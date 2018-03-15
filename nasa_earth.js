@@ -2,7 +2,7 @@ var image_cell_template = "<div class='col-sm-3 image-cell'><div class='nasa-ima
 var date_tmpl = "begin=YEAR-MONTH-DAY";
 var myApiKey = "api_key=YOUR_API_KEY";
 
-var example_image_url = "https://api.nasa.gov/EPIC/archive/natural/2015/06/13/png/epic_1b_20150613110250_01.png?api_key=YOUR_API_KEY";
+var imgUrlB = "https://api.nasa.gov/EPIC/archive/natural/";
 var epic_natural_archive_base = "https://api.nasa.gov/EPIC/archive/natural/";
 var api_url_query_base = "https://epic.gsfc.nasa.gov/api/natural/date/";
 
@@ -50,6 +50,9 @@ $(document).ready(function() {
     console.log(search_url);
     // sling it!
 
+
+
+
     // make the jQuery AJAX call!
     $.ajax({
       url: search_url,
@@ -71,10 +74,21 @@ $(document).ready(function() {
     var images = [];
     for (var i = 0; i < data.length; i++) {
       // build an array of objects that captures all of the key image data
+      var dates = data[i]['date'];
+      dates = dates.split("-","/")
+        images[i] = {
+          'identifier':data[i]['identifier'],
+          'centroidCoord':data[i]['centroid_coordinates'],
+          'imgDate':dates,
+          'imgUrl':imgUrlB+this.imgDate+data[i]['image'] +
+            ".png?api_key=" + info.api_key
+        }
+
       // => image url
       // => centroid coordinates to be displayed in the caption area
       // => image date to be displayed in the caption area (under thumbnail)
     }
+    console.log(images[2]['imgUrl']);
 
 
     // select the image grid and clear out the previous render (if any)
